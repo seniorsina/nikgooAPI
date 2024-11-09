@@ -5,7 +5,6 @@ import {
   IsOptional,
   MaxLength,
 } from "class-validator";
-
 class CreateQuoteDto {
   @IsDefined()
   @IsNotEmpty({ message: "Quote text can not be empty" })
