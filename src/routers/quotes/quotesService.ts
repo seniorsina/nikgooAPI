@@ -1,18 +1,34 @@
 import { CreateQuoteDto } from "./Dtos/quoteDto";
-import QouteModle from "../../schema/quote";
+import QuoteModel, { Quote } from "../../schema/quote";
+import mongoose from "mongoose";
+import ApiResponse from "../../class/CustomeResponse";
 
-const getAllQuotes = async () => {
-  const quotes = await QouteModle.find();
-  return quotes;
-};
+class QuoteService {
+  static getAllQuotes = async (): Promise<ApiResponse> => {
+    const quotes = await QuoteModel.find();
+    return ApiResponse.success("", [quotes]);
+  };
 
-const addQuote = async (quote: CreateQuoteDto) => {
-  try {
-    const newQuote = await QouteModle.create(quote);
-    console.log(newQuote);
-    return newQuote;
-  } catch (err) {
-    console.error("Error creating quote", err);
-  }
-};
-export { getAllQuotes, addQuote };
+  static getQuote = async (
+    id: mongoose.Types.ObjectId
+  ): Promise<Quote | null> => {
+    const quote = QuoteModel.findById(id);
+    return quote;
+  };
+
+  static addQuote = async (quote: CreateQuoteDto): Promise<ApiResponse> => {
+    const newQuote = await QuoteModel.create(quote);
+    return ApiResponse.success("new code created successfully", newQuote);
+  };
+
+  static RemoveQuote = async (id: String): Promise<ApiResponse> => {
+    const deleteQuote = await QuoteModel.findByIdAndDelete(id);
+    if (!deleteQuote) {
+      return ApiResponse.fail("Quote not found");
+    }
+
+    return ApiResponse.success("successfuly delete", deleteQuote);
+  };
+}
+
+export default QuoteService;

@@ -1,4 +1,15 @@
 import mongoose from "mongoose";
+
+import { Document } from "mongoose";
+
+export interface Quote extends Document {
+  QuoteText: string;
+  AuthorID: number;
+  lang: string;
+  UserID: string;
+  CategoryID: string;
+}
+
 const quoteSchema = new mongoose.Schema({
   QuoteText: String,
   AuthorID: Number,
@@ -10,5 +21,5 @@ const quoteSchema = new mongoose.Schema({
   CategoryID: String,
 });
 
-const QouteModle = mongoose.model("quote", quoteSchema);
-export default QouteModle;
+const QuoteModel = mongoose.model<Quote>("quote", quoteSchema);
+export default QuoteModel;
